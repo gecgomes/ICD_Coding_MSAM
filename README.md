@@ -2,14 +2,14 @@
 
 Official source code repository for the EACL2024 article [Accurate and Well-Calibrated ICD Code Assignment Through Attention Over Diverse Label Embeddings](https://arxiv.org/abs/2402.031728)
 
-```bibtex
+``bibtex
 @article{gomes2024accurate,
   title={Accurate and Well-Calibrated {ICD} Code Assignment Through Attention Over Diverse Label Embeddings},
   author={Gomes, Gon{\c{c}}alo and Coutinho, Isabel and Martins, Bruno},
   journal={arXiv preprint arXiv:2402.03172},
   year={2024}
 }
-```
+``
 
 ## How to reproduce results
 ### Setup venv environment
@@ -22,7 +22,7 @@ This code has been developed on MIMIC-III v1.4.
 1. Please note that you need to complete training to acces the data. The training is free, but takes a couple of hours.  - [link to data access](https://physionet.org/content/mimiciii/1.4/)
 2. Open the directory `data_aux`. Download the MIMIC-III data inside this directory by doing: `wget -r -N -c -np --user <physionet_user> --ask-password https://physionet.org/files/mimiciii/1.4/` inside the `data_aux` directory.
 3. MIMIC-III/1.4 is now downloaded into `data_aux`, and you should have the following path directories: `data_aux/physionet.org/files/mimiciii/1.4`, with all the MIMIC-III files inside it.
-4. Now that you download the MIMIC-III data. Lets do the split described in [Mullenbach et al.](https://github.com/jamesmullenbach/caml-mimic) (MIMIC-III-50), and the split described by [Edin et al.](https://github.com/JoakimEdin/medical-coding-reproducibility)
+4. Now that you download the MIMIC-III data. Lets do the split described by [Mullenbach et al.](https://github.com/jamesmullenbach/caml-mimic) (MIMIC-III-50), and the split described by [Edin et al.](https://github.com/JoakimEdin/medical-coding-reproducibility)
 5. Inside the directory `MIMIC-III-Preprocess`, run the code `python prepare_mimiciii_mullenbach.py` (generate the MIMIC-III-50 split), `python prepare_mimiciii_edin.py` (generate the MIMIC-III-clean split), and then `python prepare_labelizers.py` (to prepare the one hot encoding labels for both splits).
 6. Now you can see the train/val/test sets, and the one hot encodins for both splits under the directory `data`
 
@@ -62,8 +62,8 @@ The file `quantification.py` contains the script to perform both training and ev
 Imagine that we want to train the model `CE_MSAM` (Chunk-base encoding strategy with the Multi-synonym attention mechanism.), from scratch, under the MIMIC-III-50 split with four synonyms per code selected with the maximum diversity problem criterion
 
 1. Open the `Scripts/config.file`;
-2. Change ``MODEL_TYPE` variable to the desired model type: `MODEL_TYPE = "CE_MSAM"`
-3. Change ``DATA_TYPE` variable to the desired data type: `DATA_TYPE = "top50"`
+2. Change `MODEL_TYPE` variable to the desired model type: `MODEL_TYPE = "CE_MSAM"`
+3. Change `DATA_TYPE` variable to the desired data type: `DATA_TYPE = "top50"`
 4. Change `M` variable to the desired number of synonyms per ICD code: `M = 4`
 5. Change `SELECTION_CRITERION` variable to the desired synonym selection criterion: `SELECTION_CRITERION = "MDP"`
 6. Change `FILE_NAME` to a name of your choice that best represent your experiment: `FILE_NAME = "example1"`
@@ -80,8 +80,8 @@ Automatically a folder named `models/CE_MSAM/example1` will be created with the 
 Imagine that we want to train the model `LE_MSAM_CLQ` (Longformer encoding strategy with the Multi-synonym attention mechanism, and trained with the joint loss.), from scratch, under the MIMIC-III-clean split with four synonyms per code selected with the maximum diversity problem criterion
 
 1. Open the `Scripts/config.file`;
-2. Change ``MODEL_TYPE` variable to the desired model type: `MODEL_TYPE = "LE_MSAM_CLQ"`
-3. Change ``DATA_TYPE` variable to the desired data type: `DATA_TYPE = "clean"`
+2. Change `MODEL_TYPE` variable to the desired model type: `MODEL_TYPE = "LE_MSAM_CLQ"`
+3. Change `DATA_TYPE` variable to the desired data type: `DATA_TYPE = "clean"`
 4. Change `M` variable to the desired number of synonyms per ICD code: `M = 4`
 5. Change `SELECTION_CRITERION` variable to the desired synonym selection criterion: `SELECTION_CRITERION = "MDP"`
 6. Change `FILE_NAME` to a name of your choice that best represent our experiment: `FILE_NAME = "example2"`
@@ -103,8 +103,8 @@ Imagine that we want to train the `MLP` separately from scratch based on the pre
 
 First we need to produce the predictions for both the validation and test set of the MIMIC-III-50 split, so we can easily produce the quantification train and tes splits, that will be used latter to train the MLP.
 1. Open the `Scripts/config.file`;
-2. Change ``MODEL_TYPE` variable to the desired model type: `MODEL_TYPE = "CE"`
-3. Change ``DATA_TYPE` variable to the desired data type: `DATA_TYPE = "50"`
+2. Change `MODEL_TYPE` variable to the desired model type: `MODEL_TYPE = "CE"`
+3. Change `DATA_TYPE` variable to the desired data type: `DATA_TYPE = "50"`
 4. Change `FILE_NAME` to a name of your choice that best represent our experiment: `FILE_NAME = "example3"`
 5. Change `START_MODEL_FROM_CHECKPOINT` to the best performing checkpoint of our desired model: `START_MODEL_FROM_CHECKPOINT = "path/to/CE/checkpoint"`
 6. Change `MODE` to training mode: `MODE = "test"`
@@ -115,8 +115,8 @@ Automatically a folder named `models/LE_MSAM_CLQ/example3` will be created with 
 
 Now that we have the predictions for both validation and test set under the directory `models/LE_MSAM_CLQ/example3/predictions`, lets train the MLP.
 1. Open the `Scripts/config_quantification.file`;
-2. Change ``MODEL_TYPE` variable to the desired model type: `MODEL_TYPE = "CE"`
-3. Change ``DATA_TYPE` variable to the desired data type: `DATA_TYPE = "50"`
+2. Change `MODEL_TYPE` variable to the desired model type: `MODEL_TYPE = "CE"`
+3. Change `DATA_TYPE` variable to the desired data type: `DATA_TYPE = "50"`
 4. Change `FILE_NAME` to a name of your choice that best represent our experiment: `FILE_NAME = "example3"`
 5. Change `EPOCHS` variable to the maximum desired number of epochs that you want to train the MLP: `EPOCHS = 300` 
 6. Change `PATIENCE` variable to the desired early stop patience: `PATIENCE = 5` 
