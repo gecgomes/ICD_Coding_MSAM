@@ -2,14 +2,14 @@
 
 Official source code repository for the EACL2024 article [Accurate and Well-Calibrated ICD Code Assignment Through Attention Over Diverse Label Embeddings](https://arxiv.org/abs/2402.031728)
 
-``bibtex
+```bibtex
 @article{gomes2024accurate,
   title={Accurate and Well-Calibrated {ICD} Code Assignment Through Attention Over Diverse Label Embeddings},
   author={Gomes, Gon{\c{c}}alo and Coutinho, Isabel and Martins, Bruno},
   journal={arXiv preprint arXiv:2402.03172},
   year={2024}
 }
-``
+```
 
 ## How to reproduce results
 ### Setup venv environment
