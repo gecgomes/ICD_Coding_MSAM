@@ -1,10 +1,6 @@
 import copy
-from collections import OrderedDict
-from tempfile import TemporaryDirectory
-import math
-from torch.nn import functional as F
 import torch
-from transformers import LongformerConfig, LongformerModel, LongformerSelfAttention,LongformerForSequenceClassification
+from transformers import LongformerSelfAttention
 
 class BertLongSelfAttention(LongformerSelfAttention):
     """

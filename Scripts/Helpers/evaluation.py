@@ -205,72 +205,6 @@ def auc_metrics(yhat_raw, y, ymic):
 # METRICS BY CODE TYPE
 ########################
 
-def results_by_type(Y, mdir, version='mimic3'):
-    d2ind = {}
-    p2ind = {}
-
-    #get predictions for diagnoses and procedures
-    diag_preds = defaultdict(lambda: set([]))
-    proc_preds = defaultdict(lambda: set([]))
-    preds = defaultdict(lambda: set())
-    with open('%s/preds_test.psv' % mdir, 'r') as f:
-        r = csv.reader(f, delimiter='|')
-        for row in r:
-            if len(row) > 1:
-                for code in row[1:]:
-                    preds[row[0]].add(code)
-                    if code != '':
-                        try:
-                            pos = code.index('.')
-                            if pos == 3 or (code[0] == 'E' and pos == 4):
-                                if code not in d2ind:
-                                    d2ind[code] = len(d2ind)
-                                diag_preds[row[0]].add(code)
-                            elif pos == 2:
-                                if code not in p2ind:
-                                    p2ind[code] = len(p2ind)
-                                proc_preds[row[0]].add(code)
-                        except:
-                            if len(code) == 3 or (code[0] == 'E' and len(code) == 4):
-                                if code not in d2ind:
-                                    d2ind[code] = len(d2ind)
-                                diag_preds[row[0]].add(code)
-    #get ground truth for diagnoses and procedures
-    diag_golds = defaultdict(lambda: set([]))
-    proc_golds = defaultdict(lambda: set([]))
-    golds = defaultdict(lambda: set())
-    test_file = '%s/test_%s.csv' % (MIMIC_3_DIR, str(Y)) if version == 'mimic3' else '%s/test.csv' % MIMIC_2_DIR
-    with open(test_file, 'r') as f:
-        r = csv.reader(f)
-        #header
-        next(r)
-        for row in r:
-            codes = set([c for c in row[3].split(';')])
-            for code in codes:
-                golds[row[1]].add(code)
-                try:
-                    pos = code.index('.')
-                    if pos == 3:
-                        if code not in d2ind:
-                            d2ind[code] = len(d2ind)
-                        diag_golds[row[1]].add(code)
-                    elif pos == 2:
-                        if code not in p2ind:
-                            p2ind[code] = len(p2ind)
-                        proc_golds[row[1]].add(code)
-                except:
-                    if len(code) == 3 or (code[0] == 'E' and len(code) == 4):
-                        if code not in d2ind:
-                            d2ind[code] = len(d2ind)
-                        diag_golds[row[1]].add(code)
-
-    hadm_ids = sorted(set(diag_golds.keys()).intersection(set(diag_preds.keys())))
-
-    ind2d = {i:d for d,i in d2ind.items()}
-    ind2p = {i:p for p,i in p2ind.items()}
-    type_dicts = (ind2d, ind2p)
-    return diag_preds, diag_golds, proc_preds, proc_golds, golds, preds, hadm_ids, type_dicts
-
 
 def diag_f1(diag_preds, diag_golds, ind2d, hadm_ids):
     num_labels = len(ind2d)
@@ -340,25 +274,3 @@ def print_metrics(metrics):
         if metric.find("rec_at") != -1:
             print("%s: %.4f" % (metric, val))
     print()
-
-if __name__ == "__main__":
-    if len(sys.argv) < 5:
-        print("usage: python " + str(os.path.basename(__file__) + " [train_dataset] [|Y| (as string)] [version (mimic2 or mimic3)] [model_dir]"))
-        sys.exit(0)
-    train_path, Y, version, mdir = sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]
-    ind2c, _ = datasets.load_full_codes(train_path, version=version)
-
-    diag_preds, diag_golds, proc_preds, proc_golds, golds, preds, hadm_ids, type_dicts = results_by_type(Y, mdir, version)
-    yhat, yhat_raw, y, metrics = metrics_from_dicts(preds, golds, mdir, ind2c)
-    print_metrics(metrics)
-
-    k = [5] if Y == '50' else [8,15]
-    prec_at_8 = precision_at_k(yhat_raw, y, k=8)
-    print("PRECISION@8: %.4f" % prec_at_8)
-    prec_at_15 = precision_at_k(yhat_raw, y, k=15)
-    print("PRECISION@15: %.4f" % prec_at_15)
-
-    f1_diag = diag_f1(diag_preds, diag_golds, type_dicts[0], hadm_ids)
-    f1_proc = proc_f1(proc_preds, proc_golds, type_dicts[1], hadm_ids)
-    print("[BY CODE TYPE] f1-diag f1-proc")
-    print("%.4f %.4f" % (f1_diag, f1_proc))

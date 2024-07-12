@@ -3,7 +3,6 @@ from tqdm import tqdm
 import torch
 from torch.utils.data import Dataset
 from config_quantification import *
-from Helpers.model_helpers import MLP
 from torch import nn
 
 def define_samples(samples, y,n_classes):

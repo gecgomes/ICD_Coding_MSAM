@@ -4,12 +4,13 @@ from torch.nn.utils.rnn import pad_sequence
 from opt_einsum import contract
 from config import *
 from condicional_config import *
-import numpy as np
 import os
 import time
+from typing import Optional, Tuple
 from transformers import AutoModelForSequenceClassification, AutoTokenizer, PreTrainedModel, AutoConfig,PretrainedConfig
 from Helpers.bert2longformer import convert_bert_to_longformer
 from Helpers.main_helpers import *
+import pickle
 
 class SequenceClassifierOutput():
     """
@@ -173,8 +174,8 @@ class MSAM(PreTrainedModel):
                     torch.cuda.empty_cache()
             self.synonms_matrix = pad_sequence(self.synonms_matrix,batch_first = True,padding_value=0).to(DEVICE)
             self.synomns_vector = self.qllabel_pooling(self.synonms_matrix)
-            print("SYNOMS MATRIX SHAPE",self.synonms_matrix.shape)
-            print("SYNOMS VECTOR SHAPE",self.synomns_vector.shape)
+            #print("SYNOMS MATRIX SHAPE",self.synonms_matrix.shape)
+            #print("SYNOMS VECTOR SHAPE",self.synomns_vector.shape)
             with open(OUTPUT_DIR + "/synonms_matrix.pkl", 'wb') as f:
                 pickle.dump(self.synonms_matrix,f)
         else:

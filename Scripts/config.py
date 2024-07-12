@@ -4,12 +4,12 @@ import torch
 
 DEVICE = torch.device('cuda')
 
-MODEL_TYPE = "LE_MSAM" #or "LE" or "CE" or "LE_MSAM" or "CE_MSAM" or "CE_MSAM_CLQ" or "LE_MSAM_CLQ"
+MODEL_TYPE = "CE_MSAM" #or "LE" or "CE" or "LE_MSAM" or "CE_MSAM" or "CE_MSAM_CLQ" or "LE_MSAM_CLQ"
 DATA_TYPE = "top50" #or "top50" or "clean"
 M = 4
 SELECTION_CRITERION = "MDP" #or 'MDP' or 'rand'
 
-FILE_NAME = "test"
+FILE_NAME = "example1"
 
 START_MODEL_FROM_CHECKPOINT = ""
 
@@ -20,7 +20,7 @@ START_CLQ_FROM_CLASSIFIER_CHECKPOINT = ""
 START_CLQ_FROM_QUANTIFIER_CHECKPOINT = ""
 
 #Train/Test switches for the classifiers
-MODE = "test" #or "train" or "test" 
+MODE = "train" #or "train" or "test" 
 
 # ===================================================================
 # DON'T CHANGE:

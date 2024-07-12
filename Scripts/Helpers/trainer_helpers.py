@@ -8,8 +8,8 @@ from transformers import Trainer, TrainerCallback
 from Helpers.evaluation import *
 from sklearn.metrics import f1_score, recall_score,precision_score,mean_squared_error,mean_absolute_error
 from torchmetrics import CalibrationError
-mece = CalibrationError(n_bins=20, norm='l1')
-
+mece = CalibrationError(task= "binary",n_bins=20, norm='l1')
+import pickle
 
 class LEDataset(torch.utils.data.Dataset):
     def __init__(self, texts, labels, tokenizer):

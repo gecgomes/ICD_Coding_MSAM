@@ -1,5 +1,4 @@
 import numpy as np
-import codecs
 import os
 import pickle
 from transformers import ( 
